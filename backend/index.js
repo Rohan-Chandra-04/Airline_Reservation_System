@@ -271,7 +271,7 @@ app.post('/addTravellers', middleware, (req, res) => {
         return res.status(403).json({ msg: 'Failed to add traveller' });
       }
         console.log(results);
-        return res.status(201).json({ msg: 'Traveller added successfully' });
+        return res.status(201).json({results});
       })
     }
   })
@@ -308,14 +308,44 @@ app.post('/getClassAndCost', middleware, (req, res) => {
 app.post('/addBooking', middleware, (req, res) => {
   const fromData = req.body
 
-  connection.query(`insert into Booking_Details (Booking_Date, Seat_Id, Passenger_Id) values
-  ('${fromData.Booking_Date}', '${fromData.Seat_Id}', '${fromData.Traveller_Id}')`, (error, results) => {
-  if (error) {
-    console.error(error);
-    return res.status(403).json({ msg: 'Failed to add booking' });
+  console.log(fromData);
+
+  for (let i=0; i<fromData.selectedSeats.length; i++){
+
+    connection.query(`insert into Booking_Details (Booking_Date, Seat_Id, Traveller_Id) values
+    ('${fromData.date}', '${fromData.selectedSeats[i]}', '${fromData.travellerIds[i]}')`, (error, results) => {
+    if (error) {
+      console.error(error);
+      return res.status(403).json({ msg: 'Failed to add booking' });
+    }
+      console.log(results);
+      return res.status(201).json({ msg: 'Booking added successfully' });
+    })
   }
-    console.log(results);
-    return res.status(201).json({ msg: 'Booking added successfully' });
+})
+
+app.get('/getTickets', middleware, (req, res) => {
+  const userEmail = req.email;
+
+  connection.query(`select Passenger_Id from Passenger where P_Email = '${userEmail}'`, (error, results) => {
+    if (error) {
+      console.error(error);
+      return res.status(403).json({ msg: 'Failed to fetch data' });
+    }
+    else{
+      console.log(results);
+      const Passenger_Id = results[0].Passenger_Id;
+
+      connection.query(`select Booking_Id, Traveller_Name, Traveller_Age, Traveller_Email, Seat_Id, Booking_Date from Passenger inner join Traveller_Details on '${Passenger_Id}'=Traveller_Details.Passenger_Id inner join
+      Booking_Details on Booking_Details.Traveller_Id=Traveller_Details.Traveller_Id;`, (error, results) => {
+      if (error) {
+        console.error(error);
+        return res.status(403).json({ msg: 'Failed to retrieve tickets' });
+      }
+        console.log(results);
+        return res.status(201).json({results});
+      })
+    }
   })
 })
   

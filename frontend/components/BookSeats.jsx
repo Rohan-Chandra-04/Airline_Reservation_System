@@ -99,12 +99,13 @@ export default function BookSeats() {
 
     const [seats, setSeats] = useState([]);
     const [selectedSeats, setSelectedSeats] = useState([]);
-    const [colors, setColors] = useState([]);
+    const [colors, setColors] = useState(new Map());
     const [openForm, setOpenForm] = useState(false);
     const source = location.state.source;
     const destination = location.state.destination;
     const date = location.state.date;
     const Flight_Id = location.state.Flight_Id;
+    const [travellerIds, setTravellerIds] = useState([])
 
     useEffect(() => {
         async function fetchData() {
@@ -119,15 +120,20 @@ export default function BookSeats() {
             });
             const data = await response.json();
             setSeats(data.results);
-            setColors(new Array(data.results.length).fill('green'));
+            const newColors = new Map();
+            data.results.forEach(seat => {
+            newColors.set(seat.Seat_Id, 'green');
+            });
+            setColors(newColors);
         }
         fetchData();
     }, [location.state.source]);
 
     async function seatSelect(Seat_Id) {
-        const isSeatSelected = selectedSeats.includes(Seat_Id+1);
-        setSelectedSeats(prev => isSeatSelected ? prev.filter(seat => seat !== (Seat_Id+1)) : [...prev, (Seat_Id+1)]);
-        setColors(colors => colors.map((color, index) => index === Seat_Id ? (isSeatSelected ? 'green' : 'blue') : color));
+        const isSeatSelected = selectedSeats.includes(Seat_Id);
+        setSelectedSeats(prev => isSeatSelected ? prev.filter(seat => seat !== (Seat_Id)) : [...prev, (Seat_Id)]);
+        //setColors(colors => colors.map((color, index) => index === Seat_Id ? (isSeatSelected ? 'green' : 'blue') : color));
+        setColors(colors => new Map(colors.set(Seat_Id, isSeatSelected ? 'green' : 'blue')));
         alert(`seat is ${isSeatSelected ? 'deselected' : 'selected'}`);
     }
 
@@ -157,6 +163,11 @@ export default function BookSeats() {
                   throw new Error(`Request failed with status ${response.status}`);
               }
           })
+          .then(data => {
+            const obj = data.results
+            console.log(obj.insertId)
+            setTravellerIds(travellerIds => [...travellerIds, obj.insertId])
+          })
           .catch(error => {
               console.error('Error:', error);
           });
@@ -172,36 +183,41 @@ export default function BookSeats() {
       }
 
     return (
-        <div >
+        <div className='flex flex-col'>
+            <div className='text-5xl text-center bg-purple-700 text-white pt-10 pb-10'>Book your Seats: </div>
+            
+            <div className='grid grid-cols-5 gap-4 mt-8 place-content-around'>
             {seats.length > 0 ? seats.map((seat, index) => (
-                <div key={index} onClick={() => seat.Booked !== 1 && seatSelect(seat.Seat_Id-1)}>
-                    <img src="/airplane.png" alt="seat" style={{height: 40, width: 30, backgroundColor: seat.Booked === 1 ? 'red' : colors[index]}}/>
+                <div key={index} onClick={() => seat.Booked !== 1 && seatSelect(seat.Seat_Id)} className='w-16 h-16'>
+                    <img src="/airplane.png" alt="seat" style={{height: 40, width: 30, backgroundColor: seat.Booked === 1 ? 'red' : colors.get(seat.Seat_Id)}}/>
                 </div>
             )) : <h1>No seats</h1>
             
             }
+            </div>
 
-            <button type="button" onClick={clickContinue}>Continue</button>
+            <button type="button" onClick={clickContinue} className="btn btn-active btn-primary mt-8 w-48">Continue</button>
             {
                 openForm ? selectedSeats.map((seat, index) => (
-                <form method="post" onSubmit={handleSubmit} key={seat}>
-                    <label htmlFor="">
+                <form method="post" onSubmit={handleSubmit} key={seat} className='flex flex-col text-white'>
+                    <label htmlFor="" className='mt-6'>
                         Seat_Id: {seat}
                     </label>
-                    <label>
+                    <label className='mt-6'>
                         Passenger Name: <input name="T_Name" type="text" />
                     </label>
-                    <label>
+                    <label className='mt-6'>
                         Passenger age: <input name="T_Age" type="text" />
                     </label>
-                    <label>
+                    <label className='mt-6 mb-6'>
                         Passenger Email: <input name="T_Email" type="email" placeholder="enter valid email address"/>
                     </label>
 
-                    <button type="submit">Submit</button>
-                </form>)):null
+                    <button type="submit" className="btn btn-active btn-primary w-32">Submit</button>
+                </form>
+                )):null
             }
-            <button type="button" onClick={()=>{navigate('/paymentPage', {state:{source, destination, date, Flight_Id, selectedSeats}})}}>Go to Payment Page</button>
+            <button type="button" onClick={()=>{navigate('/paymentPage', {state: {selectedSeats, date, travellerIds, source, destination, Flight_Id}})}} className="btn btn-active btn-primary mt-8 w-48">Payment Page</button>
         </div>
     );
 }

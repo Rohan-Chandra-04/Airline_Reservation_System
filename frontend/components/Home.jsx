@@ -68,13 +68,27 @@ export default function Home() {
     return (
         <>
             <div>
-                <button onClick={() => navigate('/profile')}>Profile</button>
+                {/* <button onClick={() => navigate('/profile')}>Profile</button> */}
 
-                <form action="" onSubmit={handleSubmit}>
-                    <label htmlFor="">
+                <div className="navbar bg-purple-700">
+                  <div className="flex-1">
+                    <a className="btn btn-ghost text-2xl text">AirLine Reservation System</a>
+                  </div>
+                  <div className="flex-none">
+                    <ul className="menu menu-horizontal px-1">
+                      <li onClick={() => navigate('/profile')} className="text-white text-1xl"><a>Profile</a></li>
+                      <li onClick={() => navigate('/tickets')} className="text-white text-1xl">
+                        <a>Your Tickets</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <form action="" onSubmit={handleSubmit} className="flex-col px-80 py-50  h-full mt-40">
+                    <label htmlFor="" className="input input-bordered flex items-center gap-2 mb-2 text-2xl">
                         enter date: <input id="today" type="date" value={date} onChange={e=>setDate(e.target.value)}/>
                     </label>
-                    <label htmlFor="">
+                    <label htmlFor="" className="input input-bordered flex items-center gap-2 mb-2 text-2xl">
                         enter src: 
                         <div>
                             <input type="search" list="list" autoComplete="on" value={source} onChange={(e)=>setSource(e.target.value)} />
@@ -83,7 +97,7 @@ export default function Home() {
                             </datalist>
                         </div>
                     </label>
-                    <label htmlFor="">
+                    <label htmlFor="" className="input input-bordered flex items-center gap-2 mb-2 text-2xl">
                         enter destination: 
                         <div>
                             <input type="search" list="list" autoComplete="on" value={destination} onChange={(e)=>setDestination(e.target.value)} />
@@ -92,15 +106,15 @@ export default function Home() {
                             </datalist>
                         </div>
                     </label>
-                    <label htmlFor="">
+                    <label htmlFor="" className="input input-bordered flex items-center gap-2 mb-2 text-2xl">
                         Number of Travellers:
                         <div>
-                        <button type="button" onClick={()=>{if (numberOfTravellers>1) setNumberOfTravellers(numberOfTravellers-1)}}>-</button>
-                        <input type="number" value={numberOfTravellers} onChange={e=>setNumberOfTravellers(e.target.value)}/>
-                        <button type="button" onClick={()=>{ setNumberOfTravellers(numberOfTravellers+1)}}>+</button>
+                        <button className="rounded-full bg-purple-700 w-8" type="button" onClick={()=>{if (numberOfTravellers>1) setNumberOfTravellers(numberOfTravellers-1)}}>-</button>
+                        <input className="text-center w-8" value={numberOfTravellers} onChange={e=>setNumberOfTravellers(e.target.value)}/>
+                        <button className="rounded-full bg-purple-700 w-8" type="button" onClick={()=>{ setNumberOfTravellers(numberOfTravellers+1)}}>+</button>
                         </div>
                     </label>
-                    <button type="submit">Search</button>
+                    <button className="btn btn-primary" type="submit">Search</button>
                 </form>
             </div>
         </>

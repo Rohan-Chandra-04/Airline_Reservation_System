@@ -167,36 +167,71 @@ export default function SearchResults() {
     };
 
     return (
-        <>
-            <div>
-                <form onSubmit={handleSubmit}>
-                    <h3>Your preferred airlines:</h3>
-                    {airlines.length > 0 && airlines.map((airline, index) => (
-                        <div key={index}>
-                            <label>
-                                <input type="radio" name="myRadio" value={airline} />
-                                {airline}
-                            </label>
-                        </div>
-                    ))}
-                    <button type="submit">Submit</button>
-                </form>
+        <div>
+            <div className="navbar bg-purple-700">
+                  <div className="flex-1">
+                    <a className="btn btn-ghost text-2xl text">AirLine Reservation System</a>
+                  </div>
+                  <div className="flex-none">
+                    <ul className="menu menu-horizontal px-1">
+                      <li onClick={() => navigate('/profile')} className="text-white text-1xl"><a>Profile</a></li>
+                      <li onClick={() => navigate('/tickets')} className="text-white text-1xl">
+                        <a>Your Tickets</a>
+                      </li>
+                    </ul>
+                  </div>
             </div>
 
-            <div>
-                {results.length > 0 ? results.map((result, index) => (
-                    <div key={index}>
-                        <h3>{'AE08' + result.Flight_Id}</h3>
-                        <p>{source}</p>
-                        <p>{result.Departure_Date_Time.substring(11, 19)}</p>
-                        <p>{destination}</p>
-                        <p>{result.Arrival_Date_Time.substring(11, 19)}</p>
-                        <p>{result.Airplane_Type}</p>
-                        <p>{result.Cost}</p>
-                        <button type="button" onClick={()=>{navigate('/bookSeats', {state: {source, destination, date, numberOfTravellers, Flight_Id: result.Flight_Id}})}}>Book Seats</button>
-                    </div>
-                )) : <h1>No results found</h1>}
+            <div className='flex flex-row mt-8'>
+                <div className='w-300'>
+                    <h2 className="text-2xl text-white">Filters</h2>
+                    <form onSubmit={handleSubmit} className='text-white text-xl'>
+                        <h3 >Your preferred airlines:</h3>
+                        {airlines.length > 0 && airlines.map((airline, index) => (
+                            <div key={index} className='mt-3'>
+                                <label>
+                                    <input type="radio" name="myRadio" value={airline} />
+                                    {airline}
+                                </label>
+                            </div>
+                        ))}
+                        <button type="submit" className="btn btn-active btn-primary mt-3">Search</button>
+                    </form>
+                </div>
+
+                <div className='border-l-8 border-indigo-500 ml-3'></div>
+
+                <div className='ml-10'>
+                    {results.length > 0 ? results.map((result, index) => (
+                        // <div key={index}>
+                        //     <h3>{'AE08' + result.Flight_Id}</h3>
+                        //     <p>{source}</p>
+                        //     <p>{result.Departure_Date_Time.substring(11, 19)}</p>
+                        //     <p>{destination}</p>
+                        //     <p>{result.Arrival_Date_Time.substring(11, 19)}</p>
+                        //     <p>{result.Airplane_Type}</p>
+                        //     <p>{result.Cost}</p>
+                        //     <button type="button" onClick={()=>{navigate('/bookSeats', {state: {source, destination, date, numberOfTravellers, Flight_Id: result.Flight_Id}})}}>Book Seats</button>
+                        // </div>
+                        <div className="navbar bg-purple-700 mb-12 rounded-lg h-32" key={index}>
+                            <div className="text-xl text-white pr-5 mr-4">{'AE08' + result.Flight_Id}</div>
+                            <div className='text-xl flex-col text-white pr-5 mr-4'>
+                                <div>{source}</div>
+                                <div>{'Dept date time: ' +date+' ' +result.Departure_Date_Time.substring(11, 19)}</div>
+                            </div>
+                            <div className='text-xl flex-col text-white pr-5 mr-4'>
+                                <div>{destination}</div>
+                                <div>{'Arrival date time: ' +date+' ' +result.Arrival_Date_Time.substring(11, 19)}</div>
+                            </div>
+                            <div className='text-xl flex-col pr-5 mr-4 text-white'>
+                                <div>{result.Airplane_Type}</div>
+                                <div>{'Rupees '+result.Cost}</div>
+                            </div>
+                            <button type="button" onClick={()=>{navigate('/bookSeats', {state: {source, destination, date, numberOfTravellers, Flight_Id: result.Flight_Id}})}} className="btn btn-active btn-primary">Book Seats</button>
+                        </div>
+                    )) : <h1>No results found</h1>}
+                </div>
             </div>
-        </>
+        </div>
     );
 }

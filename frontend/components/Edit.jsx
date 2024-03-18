@@ -30,6 +30,7 @@ export default function Edit() {
                     if(response.ok) {
                         // If the response is ok (status is in the range 200-299),
                         // parse the JSON from the response
+                        alert('Password changed successfully')
                         navigate('/profile');
                         return response.json();
                     } 
@@ -48,16 +49,17 @@ export default function Edit() {
         
     }
     return (
-        <form method="post" onSubmit={handleSubmit}>
-            <label>
+        <form method="post" onSubmit={handleSubmit} className="flex-col px-80 py-50  h-full mt-40">
+            <div className="text-center h-20 text-4xl text-purple-700">Edit Password</div>
+            <label className="input input-bordered flex items-center gap-2">
                 Password: <input name="P_Password" type="password" />
             </label>
-            <label>
+            <label className="input input-bordered flex items-center gap-2">
                 Confirm Password: <input name="P_Confirm_Password" type="password" />
             </label>
-            <button type="submit">Submit</button>
+            <button type="submit" className="btn btn-primary">Submit</button>
 
-            {!validData && <div>Invalid input, try again</div>}
+            {!validData && <div className="text-red-700 text-2xl">Invalid input, try again</div>}
         </form>
     )
 }

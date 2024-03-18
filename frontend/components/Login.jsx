@@ -49,16 +49,26 @@ export default function Login() {
     }
 
     return (
-        <form method="post" onSubmit={handleSubmit}>
-            <label>
+        
+        <form method="post" onSubmit={handleSubmit} className="flex-col px-80 py-50  h-full mt-40">
+            {/* <label>
                 Email: <input name="P_Email" type="text" />
             </label>
             <label>
                 Password: <input name="P_Password" type="password" />
+            </label> */}
+            <div className="text-center h-20 text-4xl text-purple-700">Login</div>
+            <label className="input input-bordered flex items-center gap-2">
+              Email
+              <input type="text" className="grow" placeholder="daisy@site.com" name="P_Email"/>
             </label>
-            <button type="submit">Submit</button>
+            <label className="input input-bordered flex items-center gap-2">
+              Password
+              <input type="password" className="grow" placeholder="" name="P_Password"/>
+            </label>
+            <button className="btn btn-primary" type="submit">submit</button>
 
-            {!validData && <p>Invalid data</p>}
+            {!validData && <p className="text-red-700 text-2xl">Invalid data....</p>}
         </form>
     );
 }

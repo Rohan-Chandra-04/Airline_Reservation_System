@@ -5,6 +5,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import './index.css'
 
 import Signup from '../components/Signup.jsx'
 import Login from '../components/Login.jsx'
@@ -16,6 +17,7 @@ import Admin from '../components/Admin.jsx'
 import SearchResults from '../components/SearchResults.jsx'
 import BookSeats from '../components/BookSeats.jsx'
 import PaymentPage from '../components/PaymentPage.jsx'
+import Tickets from '../components/Tickets.jsx'
 //import './index.css'
 
 const router = createBrowserRouter([
@@ -74,6 +76,12 @@ const router = createBrowserRouter([
     element: <PaymentPage />,
     errorElement: <div>Not Found</div>,
   },
+  {
+    path: "/tickets",
+    element: <Tickets />,
+    errorElement: <div>Not Found</div>,
+  },
+  
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

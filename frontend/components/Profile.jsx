@@ -50,8 +50,8 @@ export default function Profile() {
 
     return(
         <>
-            <div>
-                <div>your name: {fetchedData.P_FirstName + ' '+ fetchedData.P_LastName}</div>
+            {/* <div>
+                <div></div>
                 <div>your email: {fetchedData.P_Email}</div>
                 <div>your phone: {fetchedData.P_Phone}</div>
                 <div>your address: {fetchedData.P_Address}</div>
@@ -60,7 +60,18 @@ export default function Profile() {
                 <div>your country: {fetchedData.P_Country}</div>
                 <hr></hr>
                 <div onClick={()=>navigate('/userEdit')}>Edit your password</div>
-            </div>
+            </div> */}
+            <h1 className='text-purple-700 text-center text-4xl my-8'>Your Profile</h1>
+            <ul className="menu menu-lg bg-base-200 rounded-box mx-240">
+              <li className="text-purple-700 text-2xl pb-3 px-60"><a>your name: {fetchedData.P_FirstName + ' '+ fetchedData.P_LastName}</a></li>
+              <li className="text-purple-700 text-2xl pb-3 px-60"><a>your email: {fetchedData.P_Email}</a></li>
+              <li className="text-purple-700 text-2xl pb-3 px-60"><a >your phone: {fetchedData.P_Phone}</a></li>
+              <li className="text-purple-700 text-2xl pb-3 px-60"><a >your city: {fetchedData.P_City}</a></li>
+              <li className="text-purple-700 text-2xl pb-3 px-60"><a >your state: {fetchedData.P_State}</a></li>
+              <li className="text-purple-700 text-2xl pb-3 px-60"><a >your country: {fetchedData.P_Country}</a></li>
+            </ul>
+            <div onClick={()=>navigate('/userEdit')} className="text-red-600 text-2xl text-center mt-6">Edit your password</div>
+            
         </>
     )
 }
