@@ -46,22 +46,47 @@ export default function AddAirport() {
     
     }
 return (
-    <form method="post" onSubmit={handleSubmit}>
-        <label>
-            Airport Name: <input name="AirportName" type="text" />
-        </label>
-        <label htmlFor="">
-            Airport City: <input name="AirportCity" type="text" />
-        </label>
-        <label htmlFor="">
-            Airport Country: <input name="AirportCountry" type="text" />
-        </label>
-        <hr />
+    // <form method="post" onSubmit={handleSubmit}>
+    //     <label>
+    //         Airport Name: <input name="AirportName" type="text" />
+    //     </label>
+    //     <label htmlFor="">
+    //         Airport City: <input name="AirportCity" type="text" />
+    //     </label>
+    //     <label htmlFor="">
+    //         Airport Country: <input name="AirportCountry" type="text" />
+    //     </label>
+    //     <hr />
         
-        <button type="submit">Submit form</button>
+    //     <button type="submit">Submit form</button>
 
-        {!validData && <p>airport is not added to our list, try again</p>}
-        {showSuccess && <p>airport added successfully</p>}
-    </form>
+    //     {!validData && <p>airport is not added to our list, try again</p>}
+    //     {showSuccess && <p>airport added successfully</p>}
+    // </form>
+
+    <form method="post" onSubmit={handleSubmit} className="flex-col px-80 py-50  h-full mt-40">
+                    
+                    <label htmlFor="" className="input input-bordered flex items-center gap-2 mb-2 text-2xl">
+                        enter Airport Name: 
+                        <div>
+                            <input type="text" name="AirportName" />
+                            
+                        </div>
+                    </label>
+                    <label htmlFor="" className="input input-bordered flex items-center gap-2 mb-2 text-2xl">
+                        enter City: 
+                        <div>
+                            <input type="text" name="AirportCity" />
+                            
+                        </div>
+                    </label>
+                    <label htmlFor="" className="input input-bordered flex items-center gap-2 mb-2 text-2xl">
+                        enter country: <input type="text" name="AirportCountry" />
+                    </label>
+                    <button className="btn btn-primary" type="submit">Add Airport</button>
+
+                    {!validData && <p>airport is not added to our list, try again</p>}
+                    {showSuccess && <p>airport added successfully</p>}
+                </form>
 );
 }

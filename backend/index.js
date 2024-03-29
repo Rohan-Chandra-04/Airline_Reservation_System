@@ -67,8 +67,11 @@ app.post("/passengerSignup", async (req, res) => {
     }
     else{
       const insertPassengers = `
-    INSERT INTO Passenger (P_FirstName, P_LastName, P_Email, P_Password, P_PhoneNumber, P_Address, P_City, P_State, P_Zipcode, P_Country) VALUES
-     ('${formData.P_FirstName}', '${formData.P_LastName}', '${formData.P_Email}', '${formData.P_Password}', '${formData.P_PhoneNumber}', '${formData.P_Address}', '${formData.P_City}', '${formData.P_State}', '${formData.P_Zipcode}', '${formData.P_Country}');
+    INSERT INTO Passenger (P_FirstName, P_LastName, P_Email, P_Password,
+       P_PhoneNumber, P_Address, P_City, P_State, P_Zipcode, P_Country) VALUES
+     ('${formData.P_FirstName}', '${formData.P_LastName}', '${formData.P_Email}',
+      '${formData.P_Password}', '${formData.P_PhoneNumber}', '${formData.P_Address}',
+     '${formData.P_City}', '${formData.P_State}', '${formData.P_Zipcode}', '${formData.P_Country}');
     `;
     
     connection.query(insertPassengers, (error, results, fields) => {
@@ -98,7 +101,8 @@ app.post('/passengerLogin', async (req, res) => {
     return res.status(400).send("invalid input");
   }
   else{
-    const passengerExists = `select P_Email, P_Password from Passenger where P_Email = '${formData.P_Email}' and P_Password = '${formData.P_Password}'`;
+    const passengerExists = `select P_Email, P_Password from Passenger 
+    where P_Email = '${formData.P_Email}' and P_Password = '${formData.P_Password}'`;
     connection.query(passengerExists, (error, results, fields) => {
         if (error) {
             console.log(error);
@@ -144,7 +148,8 @@ app.post('/passengerEdit', middleware, async (req, res) => {
   console.log(updatedPassword);
 
   
-  const passengerEdit = `update Passenger set P_Password = '${updatedPassword}' where P_Email = '${email}'`;
+  const passengerEdit = `update Passenger set P_Password = '${updatedPassword}'
+   where P_Email = '${email}'`;
   connection.query(passengerEdit, (error, results, fields) => {
     if (error) {
         console.log(error);
@@ -204,7 +209,8 @@ app.post('/searchResults', middleware, (req, res) => {
     AND Destination_Airport_Id = (SELECT Airport_Id FROM Airport WHERE AirportCity = ? AND AirportName = ?)
     AND DATE(Departure_Date_Time) = ?`;
 
-  let queryParams = [sourceAirportCity, sourceAirportName, destinationAirportCity, destinationAirportName, date];
+  let queryParams = [sourceAirportCity, sourceAirportName, destinationAirportCity,
+     destinationAirportName, date];
 
   //If airline is specified in the query parameters, add it to the query
   if (airline !== "undefined") {
@@ -255,7 +261,8 @@ app.post('/addTravellers', middleware, (req, res) => {
   const userEmail = req.email;
   const formData = req.body;
 
-  connection.query(`select Passenger_Id from Passenger where P_Email = '${userEmail}'`, (error, results) => {
+  connection.query(`select Passenger_Id from Passenger 
+  where P_Email = '${userEmail}'`, (error, results) => {
     if (error) {
       console.error(error);
       return res.status(403).json({ msg: 'Failed to fetch data' });
@@ -264,8 +271,10 @@ app.post('/addTravellers', middleware, (req, res) => {
       console.log(results);
       formData.Passenger_Id = results[0].Passenger_Id;
 
-      connection.query(`insert into Traveller_Details (Traveller_Name, Traveller_Age, Traveller_Email, Passenger_Id) values
-      ('${formData.T_Name}', '${formData.T_Age}', '${formData.T_Email}', '${formData.Passenger_Id}')`, (error, results) => {
+      connection.query(`insert into Traveller_Details
+       (Traveller_Name, Traveller_Age, Traveller_Email, Passenger_Id) values
+      ('${formData.T_Name}', '${formData.T_Age}', '${formData.T_Email}',
+       '${formData.Passenger_Id}')`, (error, results) => {
       if (error) {
         console.error(error);
         return res.status(403).json({ msg: 'Failed to add traveller' });
@@ -306,14 +315,15 @@ app.post('/getClassAndCost', middleware, (req, res) => {
 })
 
 app.post('/addBooking', middleware, (req, res) => {
-  const fromData = req.body
+  const fromData = req.body.queryDate;
 
   console.log(fromData);
 
   for (let i=0; i<fromData.selectedSeats.length; i++){
 
     connection.query(`insert into Booking_Details (Booking_Date, Seat_Id, Traveller_Id) values
-    ('${fromData.date}', '${fromData.selectedSeats[i]}', '${fromData.travellerIds[i]}')`, (error, results) => {
+    ('${fromData.date}', '${fromData.selectedSeats[i]}', '${fromData.travellerIds[i]}')`,
+     (error, results) => {
     if (error) {
       console.error(error);
       return res.status(403).json({ msg: 'Failed to add booking' });
@@ -327,7 +337,8 @@ app.post('/addBooking', middleware, (req, res) => {
 app.get('/getTickets', middleware, (req, res) => {
   const userEmail = req.email;
 
-  connection.query(`select Passenger_Id from Passenger where P_Email = '${userEmail}'`, (error, results) => {
+  connection.query(`select Passenger_Id from Passenger where 
+  P_Email = '${userEmail}'`, (error, results) => {
     if (error) {
       console.error(error);
       return res.status(403).json({ msg: 'Failed to fetch data' });
@@ -336,8 +347,11 @@ app.get('/getTickets', middleware, (req, res) => {
       console.log(results);
       const Passenger_Id = results[0].Passenger_Id;
 
-      connection.query(`select Booking_Id, Traveller_Name, Traveller_Age, Traveller_Email, Seat_Id, Booking_Date from Passenger inner join Traveller_Details on '${Passenger_Id}'=Traveller_Details.Passenger_Id inner join
-      Booking_Details on Booking_Details.Traveller_Id=Traveller_Details.Traveller_Id;`, (error, results) => {
+      connection.query(`select Booking_Id, Traveller_Name, Traveller_Age,
+       Traveller_Email, Seat_Id, Booking_Date from Passenger inner join 
+       Traveller_Details on '${Passenger_Id}'=Traveller_Details.Passenger_Id inner join
+      Booking_Details on Booking_Details.Traveller_Id=Traveller_Details.Traveller_Id;`,
+       (error, results) => {
       if (error) {
         console.error(error);
         return res.status(403).json({ msg: 'Failed to retrieve tickets' });
@@ -349,6 +363,27 @@ app.get('/getTickets', middleware, (req, res) => {
   })
 })
   
+app.post('/getBookings', (req, res)=>{
+  const formData = req.body;
+  console.log(formData)
+  const queryDate = formData.queryDate;
+  console.log(queryDate)
+
+  connection.query(`select b.Seat_Id, b.Booking_Date, t.Travel_Class_Name, p.Traveller_Name from
+   Booking_Details b inner join Seat_Details s on s.Seat_Id=b.Seat_Id inner join 
+   Travel_Class t on t.Travel_Class_Id=s.Travel_Class_Id inner join
+   Traveller_Details p on p.Traveller_Id=b.Traveller_Id where b.Booking_Date='${queryDate}'`,
+    (error, results)=>{
+      if (error){
+        console.error(error);
+        return res.status(403).json({ msg: 'Failed to retrieve tickets' });
+      }
+
+      console.log(results);
+        return res.status(201).json({results});
+  })
+})
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

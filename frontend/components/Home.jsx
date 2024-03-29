@@ -86,7 +86,7 @@ export default function Home() {
 
                 <form action="" onSubmit={handleSubmit} className="flex-col px-80 py-50  h-full mt-40">
                     <label htmlFor="" className="input input-bordered flex items-center gap-2 mb-2 text-2xl">
-                        enter date: <input id="today" type="date" value={date} onChange={e=>setDate(e.target.value)}/>
+                        enter date: <input id="today" type="date" value={date} onChange={e=>setDate(e.target.value)} minDate={new Date()}/>
                     </label>
                     <label htmlFor="" className="input input-bordered flex items-center gap-2 mb-2 text-2xl">
                         enter src: 
