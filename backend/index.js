@@ -3,6 +3,7 @@ import mysql from "mysql";
 import cors from "cors";
 import {z} from "zod";
 import jwt from "jsonwebtoken";
+import {connection} from "./helpers/connection.js";
 
 import {middleware} from "./authMiddleware.js";
 import { passengerInput } from "./zodSchemas/passengerInput.js";
@@ -27,12 +28,6 @@ app.use(cors({
 
 const secret = process.env.JWT_SECRET;
 
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER_ID,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-});
 
 connection.connect(err => {
   if (err) {

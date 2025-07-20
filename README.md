@@ -19,3 +19,6 @@ But you need to get a sql database service hosted on clever cloud and fill in th
 and now you can run the main index.js
 file using command: <br>
 `node index.js` <br>
+
+### DB_SCHEMA_DIAGRAM:
+<img src='frontend/public/db_schema_diag.png' alt='loading the diagram' width='800'/>
